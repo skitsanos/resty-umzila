@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  openresty-dev:
+    container_name: resty-umzila-dev
+    image: openresty/openresty
+    volumes:
+      - ./app:/app
+      - ./data:/data
+      - ./src:/libs
+      - ./nginx/conf:/usr/local/openresty/nginx/conf
+    ports:
+      - "8888:80"
