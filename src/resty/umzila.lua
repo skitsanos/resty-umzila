@@ -1,5 +1,6 @@
 local M = {
-    version = '1.0.1'
+    version = '1.0.1',
+    content_type = 'text/plain'
 }
 
 -- Private variables
@@ -24,7 +25,7 @@ local function ensure_starts_with_slash(str)
 end
 
 -- Public function
-function M.router(method, path, handler)
+function M.route(method, path, handler)
     method = string.upper(method)
     if not routes[method] then
         routes[method] = {}
@@ -37,12 +38,9 @@ end
 function M.handle_request()
     local method = ngx.req.get_method()
     local uri = ngx.var.uri
-    print("Handling request: ", method, uri) -- Debug statement
 
     if routes[method] then
         for path, route_data in pairs(routes[method]) do
-            print(path)
-            print("Checking against route pattern: ", route_data.pattern) -- Debug statement
             local matches = { string.match(uri, route_data.pattern) }
 
             if #matches > 0 then
@@ -120,7 +118,7 @@ function M.load_routes(directory, mount)
 
         if (routes[route_item.method][route_item.routePath] == nil) then
             print('\n' .. route_item.method .. '\n' .. ensure_starts_with_slash(route_item.routePath) .. '\n')  -- Debug statement
-            M.router(route_item.method, ensure_starts_with_slash(route_item.routePath), require(route_item.handler))
+            M.route(route_item.method, ensure_starts_with_slash(route_item.routePath), require(route_item.handler))
         end
     end
 end
