@@ -1,23 +1,24 @@
-local router_module = require('resty.umzila')
+local umzila = require('resty.umzila')
 
-local router = router_module.register
-local handle_request = router_module.handle_request
+ngx.log(ngx.INFO, 'resty-umzila v.' .. umzila.version)
 
-router('get', '/', function ()
+umzila.route('get', '/', function()
     -- Your logic here
     ngx.say('It works!')
 end)
 
-router('get', '/users/:userId', function (params)
+umzila.route('get', '/users/:userId', function(params)
     local userId = params.userId
     -- Your logic here
-    ngx.say('UserID: '.. userId)
+    ngx.say('UserID: ' .. userId)
 end)
 
-router('get', '/downloads/*', function (params)
+umzila.route('get', '/downloads/*', function(params)
     local wildcard = params.wildcard
     -- Your logic here
-    ngx.say('Path to download: '.. wildcard)
+    ngx.say('Path to download: ' .. wildcard)
 end)
 
-handle_request()
+umzila.load_routes('app/api', '/api')
+
+umzila.handle_request()
