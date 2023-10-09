@@ -102,7 +102,6 @@ function M.load_routes(directory, mount)
         local handler_raw = v:gsub("%/", "."):sub(1):match('(.+).lua$')
 
         local modified_url_raw = url_raw:gsub("^" .. directory, mount):sub(1)
-        print(modified_url_raw)
 
         local route_item = {
             path = v,
@@ -117,7 +116,6 @@ function M.load_routes(directory, mount)
         end
 
         if (routes[route_item.method][route_item.routePath] == nil) then
-            print('\n' .. route_item.method .. '\n' .. ensure_starts_with_slash(route_item.routePath) .. '\n')  -- Debug statement
             M.route(route_item.method, ensure_starts_with_slash(route_item.routePath), require(route_item.handler))
         end
     end
